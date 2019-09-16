@@ -6,7 +6,7 @@ const User = require("../../models/user");
 
 const router = express.Router();
 
-router.get("/:id", (req,res,next) => {
+router.get("/:id", CheckAuth, (req,res,next) => {
 	var origin = req.headers.origin;
 	var reqUserId = req.params.id;
 	console.log("User data (id: " + reqUserId + ") requested by " + origin);
