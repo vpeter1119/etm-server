@@ -1,0 +1,34 @@
+var app = require("express");
+var router = app.Router();
+
+const Character = require("../../models/character");
+const checkAuth = require("../../middleware/check-auth");
+
+router.get("/characters", checkAuth, (req, res, next) => {
+  var origin = req.headers.origin;
+  var currentUser = req.userData.userId;
+  console.log("Characters (admin) requested by: " + origin);
+  if (currentUser === process.env.ADMIN_ID) {
+    Character.find({}, (err, allCharacters) => {
+      if (err) {
+        console.log(err);
+        console.log("Failed to retreive all characters.");
+        res
+          .status(500)
+          .json({ message: "Server failed to retrieve characters." });
+      } else {
+        if (!allCharacters) {
+          console.log("No characters found.");
+          res.status(404).json({ message: "No characters found." });
+        } else {
+          console.log("Success.");
+          res.status(200).json(allCharacters);
+        }
+      }
+    });
+  } else {
+    res.status(401).json({ message: "Insufficicent permissions." });
+  }
+});
+
+module.exports = router;
