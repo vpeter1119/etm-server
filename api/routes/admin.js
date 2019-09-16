@@ -5,6 +5,13 @@ const Character = require("../../models/character");
 const User = require("../../models/user");
 const checkAuth = require("../../middleware/check-auth");
 
+router.get("/status", (req,res,next) => {
+	res.status(200).json({
+		running: true,
+		message: "The server is up and running."
+	});
+})
+
 router.get("/characters", checkAuth, (req, res, next) => {
   var origin = req.headers.origin;
   var currentUser = req.userData.userId;
