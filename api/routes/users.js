@@ -6,6 +6,20 @@ const User = require("../../models/user");
 
 const router = express.Router();
 
+router.get("/:id", (req,res,next) => {
+	var origin = req.headers.origin;
+	var reqUserId = req.params.id;
+	console.log("User data (id: " + reqUserId + ") requested by " + origin);
+	User.find({_id: reqUserId}, (err, foundUser) => {
+		if (!foundUser) {
+			console.log("User not found.");
+			res.status(404).json({message: "User not found."});
+		} else {
+			res.status(200).json(foundUser);
+		}
+	});
+})
+
 router.post("/signup", (req, res, next) => {
   bcrypt.hash(req.body.password, 10).then(hash => {
     const user = new User({
