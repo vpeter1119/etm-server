@@ -96,8 +96,10 @@ router.post("/login", (req, res, next) => {
       });
     })
     .catch(err => {
-      return res.status(401).json({
-        message: "Auth failed"
+		console.log("Authentication failed: other error.");
+		console.log(err);
+      return res.status(500).json({
+        message: "Auth failed: server error."
       });
     });
 });
