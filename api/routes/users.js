@@ -54,6 +54,7 @@ router.post("/login", (req, res, next) => {
   User.findOne({ username: req.body.username })
     .then(user => {
       if (!user) {
+		console.log("Authentication failed: no user found.");
         return res.status(404).json({
           message: ("No user with username " + req.body.username + " found.")
         });
@@ -63,6 +64,7 @@ router.post("/login", (req, res, next) => {
     })
     .then(result => {
       if (!result) {
+		console.log("Authentication failed: incorrect password.");
         return res.status(401).json({
           message: "Auth failed"
         });
