@@ -54,8 +54,8 @@ router.post("/login", (req, res, next) => {
   User.findOne({ username: req.body.username })
     .then(user => {
       if (!user) {
-        return res.status(401).json({
-          message: "Auth failed"
+        return res.status(404).json({
+          message: ("No user with username " + req.body.username + " found.")
         });
       }
       fetchedUser = user;
