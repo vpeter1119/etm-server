@@ -90,7 +90,7 @@ router.post("/login", (req, res, next) => {
         token: token,
         expiresIn: 3600,
 		userData: fetchedUser,
-		registeredDate: ObjectId(fetchedUser._id).getTimeStamp(),
+		registeredDate: fetchedUser._id.getTimeStamp(),
         userId: fetchedUser._id,
         isAdmin: isAdmin
       });
