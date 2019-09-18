@@ -2,6 +2,7 @@ var app = require("express");
 var router = app.Router();
 
 const Article = require("../../models/article");
+const User = require("../../models/user");
 const checkAuth = require("../../middleware/check-auth");
 
 router.get("/", (req, res, next) => {
@@ -12,7 +13,7 @@ router.get("/", (req, res, next) => {
 		console.log("Failure.");
 		console.log(err);
 		res.status(500).json({
-			message: "An error occured. Could not retrieve articles."
+			message: "An error occurred. Could not retrieve articles."
 		});
 	  } else {
 		if (!allArticles) {
@@ -37,7 +38,7 @@ router.get("/:id", (req,res,next) => {
 			console.log("Failure.");
 			console.log(err);
 			res.status(500).json({
-				message: "An error occured. Could not retrieve article."
+				message: "An error occurred. Could not retrieve article."
 			});
 		} else {
 			if (!foundArticle) {
@@ -47,6 +48,29 @@ router.get("/:id", (req,res,next) => {
 				});
 			} else {
 				console.log("Success.");
+				var authorData;
+				User.findOne({_id: foundArticle.author}, (err, foundUser) => {
+					if (err) {
+						console.log("Failure.");
+						console.log(err);
+						res.status(500).json({
+							message: "An error occurred. Could not retrieve article."
+						});
+					} else {
+						if (!foundUser) {
+							console.log("Error: Author not found.");
+							res.status(500).json({
+								message: "An error occurred. Could not retrieve article."
+							});
+						} else {
+							authorData = {
+								_id: foundUser._id,
+								username: foundUser.username
+							};
+						}
+					}
+				});
+				foundArticle.author = authorData;
 				res.status(200).json(foundArticle);
 			}
 		}
