@@ -32,7 +32,7 @@ router.get("/:id", (req,res,next) => {
 	var id = req.params.id;
 	var origin = req.headers.origin;
 	console.log("Article (id: " + id + ") requested by: " + origin);
-	Article.find({_id: id}, (err, foundArticle) => {
+	Article.findOne({_id: id}, (err, foundArticle) => {
 		if (err) {
 			console.log("Failure.");
 			console.log(err);
