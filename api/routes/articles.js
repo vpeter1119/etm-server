@@ -70,8 +70,10 @@ router.get("/:id", (req,res,next) => {
 						}
 					}
 				});
-				foundArticle.author = authorData;
-				res.status(200).json(foundArticle);
+				res.status(200).json({
+					articleData: foundArticle,
+					authorData: authorData,
+					});
 			}
 		}
 	});
