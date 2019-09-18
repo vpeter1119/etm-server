@@ -28,6 +28,31 @@ router.get("/", (req, res, next) => {
   });
 });
 
+router.get("/:id", (req,res,next) => {
+	var id = req.params.id;
+	var origin = req.headers.origin;
+	console.log("Article (id: " + id + ") requested by: " + origin);
+	Article.find({_id: id}, (err, foundArticle) => {
+		if (err) {
+			console.log("Failure.");
+			console.log(err);
+			res.status(500).json({
+				message: "An error occured. Could not retrieve article."
+			});
+		} else {
+			if (!foundArticle) {
+				console.log("Error: Article not found.");
+				res.status(404).json({
+					message: "Error: Article not found."
+				});
+			} else {
+				console.log("Success.");
+				res.status(200).json(foundArticle);
+			}
+		}
+	});
+});
+
 router.post("/", checkAuth, (req, res, next) => {
   var origin = req.headers.origin;
   console.log("Articles POST request by: " + origin);

@@ -16,7 +16,11 @@ router.get("/:id", checkAuth, (req,res,next) => {
 			console.log("User not found.");
 			res.status(404).json({message: "User not found."});
 		} else {
-			res.status(200).json(foundUser);
+			res.status(200).json({
+				_id: foundUser._id,
+				username: foundUser.username,
+				email: foundUser.email,
+			});
 		}
 	});
 })
