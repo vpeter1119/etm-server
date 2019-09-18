@@ -48,32 +48,39 @@ router.get("/:id", (req,res,next) => {
 				});
 			} else {
 				console.log("Success.");
-				var authorData;
-				User.findOne({_id: foundArticle.author}, (err, foundUser) => {
-					if (err) {
-						console.log("Failure.");
-						console.log(err);
-						res.status(500).json({
-							message: "An error occurred. Could not retrieve article."
-						});
-					} else {
-						if (!foundUser) {
-							console.log("Error: Author not found.");
+				var authorData = {username: "nemo"};
+				pGetAuthorData = new Promise((resolve,reject) => {
+					User.findOne({_id: foundArticle.author}, (err, foundUser) => {
+						if (err) {
+							console.log("Failure.");
+							console.log(err);
 							res.status(500).json({
 								message: "An error occurred. Could not retrieve article."
 							});
 						} else {
-							authorData = {
-								_id: foundUser._id,
-								username: foundUser.username
-							};
+							if (!foundUser) {
+								console.log("Error: Author not found.");
+								res.status(500).json({
+									message: "An error occurred. Could not retrieve article."
+								});
+							} else {
+								authorData = {
+									_id: foundUser._id,
+									username: foundUser.username
+								};
+							}
 						}
-					}
-				});
-				res.status(200).json({
-					articleData: foundArticle,
-					authorData: authorData,
 					});
+					setTimeout(() => {
+						resolve(authorData);
+					}, 300);
+				});
+				pGetAuthorData.then((value) => {
+					res.status(200).json({
+					articleData: foundArticle,
+					authorData: value,
+					});
+				});
 			}
 		}
 	});
