@@ -36,6 +36,7 @@ mongoose.connect(
 
 var characters = require("./api/routes/characters");
 var themebooks = require("./api/routes/themebooks");
+var articles = require("./api/routes/articles");
 var admin = require("./api/routes/admin");
 var users = require("./api/routes/users");
 
@@ -55,6 +56,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/characters", characters);
 app.use("/api/themebooks", themebooks);
+app.use("/api/articles", articles);
 app.use("/api/admin", admin);
 app.use("/api/users", users);
 
