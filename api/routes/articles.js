@@ -123,4 +123,20 @@ router.put("/", checkAuth, (req, res, next) => {
   });
 });
 
+router.delete("/:id", checkAuth, (req,res,next) => {
+	var origin = req.headers.origin;
+	var id = req.params.id;
+	console.log("Article (id: " + id + ") DELETE request by: " + origin);
+	Article.deleteOne({ _id : id }, (err) => {
+		if (err) {
+			console.log(err);
+			console.log("Failure.");
+			res.status(500).json({ message: "Failed to delete article." });
+		} else {
+			console.log("Success.");
+			res.status(200).json({ message: "Article deleted." });
+		}
+	});
+});
+
 module.exports = router;
