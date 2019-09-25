@@ -36,6 +36,28 @@ router.get("/characters", checkAuth, (req, res, next) => {
   }
 });
 
+router.delete("/characters/:id", checkAuth, (req,res,next) => {
+	var id = req.params.id;
+	var origin = req.headers.origin;
+	var currentUser = req.userData.userId;
+	console.log("Character (id: " + id + ") final DELETE requested by: " + origin);
+	if (currentUser == process.env.ADMIN_ID) {
+		Character.deleteOne({ _id: id }, err => {
+			if (err) {
+				console.log(err);
+				console.log("Failure.");
+				res.status(500).json({message: "Could not delete character."});
+			} else {
+				console.log("Success.");
+				res.status(200).json({message: "Character deleted from database."});
+			}
+		});
+	} else {
+		console.log("Insufficient permissions.");
+		res.status(401).json({ message: "Insufficicent permissions." });
+	}
+});
+
 router.get("/users", checkAuth, (req, res, next) => {
   var origin = req.headers.origin;
   var currentUser = req.userData.userId;
