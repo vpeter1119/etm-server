@@ -31,7 +31,7 @@ const characterSchema = new mongoose.Schema({
       ]
     }
   ]
-});
+}, { timestamps: true });
 
 const Character = mongoose.model("Character", characterSchema);
 
